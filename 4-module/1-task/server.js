@@ -12,7 +12,7 @@ server.on('request', (req, res) => {
 
   switch (req.method) {
     case 'GET':
-      console.log(pathname);
+     // console.log(pathname);
       if ( pathname.indexOf('/')!== -1 ) {
         res.statusCode = 400;
         res.end('Вложенные папки не поддерживаются');
@@ -21,11 +21,11 @@ server.on('request', (req, res) => {
         stream.on('error', (err) => {
           res.statusCode = 404;
           res.end('Not Found File');
-          console.log( 'error;', err );
+          //console.log( 'error;', err );
         });
         stream.pipe(res)
         stream.on('end', () => {
-          console.log('File uploaded');
+          //console.log('File uploaded');
         });
       }
       break;
