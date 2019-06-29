@@ -4,4 +4,3 @@ John
 Robert
 James
 Michael
-g
