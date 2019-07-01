@@ -27,7 +27,7 @@ server.on('request', (req, res) => {
           const stream = fs.createWriteStream(filepath);
           req.on('close', () => {
             if (req.aborted) {
-              console.log('Connection aborted');
+              //console.log('Connection aborted');
               fs.unlinkSync(filepath);
               res.statusCode = 500;
               res.end('Сonnection aborted');
