@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Product = require('../models/Product');
 
 
-// продукт по подкатегории
+// продукты по подкатегории
 module.exports.productsBySubcategory = async function productsBySubcategory(ctx, next) {
   const subcat = ctx.query.subcategory;
   if (!mongoose.Types.ObjectId.isValid(subcat)) {
@@ -10,14 +10,22 @@ module.exports.productsBySubcategory = async function productsBySubcategory(ctx,
     ctx.status = 400;
   } else {
     const products = await Product.find({subcategory: subcat});
-    ctx.body = {products: products};
+    const productsToObject = products.map((el)=>{
+      const oneProduct = el.toObject();
+      return oneProduct;
+    } );
+    ctx.body = {products: productsToObject};
   }
 };
 
 // продукт по
 module.exports.productList = async function productList(ctx, next) {
   const products = await Product.find();
-  ctx.body = {products: products};
+  const productsToObject = products.map((el)=>{
+    const oneProduct = el.toObject();
+    return oneProduct;
+  } );
+  ctx.body = {products: productsToObject};
 };
 
 // продукт по id
@@ -26,12 +34,12 @@ module.exports.productById = async function productById(ctx, next) {
     ctx.body = 'id - not ObjectId';
     ctx.status = 400;
   } else {
-    const product = await Product.find( {_id: ctx.params.id});
-    if (product.length === 0) {
+    const product = await Product.findById( ctx.params.id );
+    if (!product) {
       ctx.body = 'нет товара с таким ID';
       ctx.status = 404;
     } else {
-      ctx.body = {product: product[0]};
+      ctx.body = {product: product.toObject()};
     }
   }
 };
