@@ -6,28 +6,31 @@ const subCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
 });
 
 const categorySchema = new mongoose.Schema({
-  subcategories: [subCategorySchema],
   title: {
     type: String,
     required: true,
   },
+
+  subcategories: [subCategorySchema],
+});
+
+subCategorySchema.set('toObject', {
+  virtuals: true,
+  versionKey: false,
+  transform: function(doc, ret) {
+    delete ret._id;
+  },
+});
+
+categorySchema.set('toObject', {
+  virtuals: true,
+  versionKey: false,
+  transform: function(doc, ret) {
+    delete ret._id;
+  },
 });
 
 module.exports = connection.model('Category', categorySchema);
-
-/*
-Модель категории (`models/Category.js`) должна иметь следующий набор полей:
-
-- `title`, в этом поле будет находиться название категории, например, "Детские товары" или
-"Компьютерная техника".
-    - строковое
-    - обязательное
-- `subcategories`, массив подкатегорий. Каждая подкатегория имеет слеюуще поле:
-    - `title`, в этом поле будет находиться название подкатегории.
-        - строковое
-        - обязательное
- */
