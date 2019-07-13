@@ -17,4 +17,21 @@ const categorySchema = new mongoose.Schema({
   subcategories: [subCategorySchema],
 });
 
+
+subCategorySchema.set('toObject', {
+  virtuals: true,
+  versionKey: false,
+  transform: function(doc, ret) {
+    delete ret._id;
+  },
+});
+
+categorySchema.set('toObject', {
+  virtuals: true,
+  versionKey: false,
+  transform: function(doc, ret) {
+    delete ret._id;
+  },
+});
+
 module.exports = connection.model('Category', categorySchema);
