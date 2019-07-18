@@ -45,6 +45,7 @@ const router = new Router({prefix: '/api'});
 
 router.use(async (ctx, next) => {
   const header = ctx.request.get('Authorization');
+  console.log(header);
   if (!header) return next();
 
   const token = header.split(' ')[1];
@@ -72,8 +73,10 @@ router.post('/oauth_callback', handleMongooseValidationError, oauthCallback);
 
 router.get('/me', mustBeAuthenticated, me);
 
-router.post('/register' /* TODO */);
-router.post('/confirm' /* TODO */);
+
+router.post('/register', handleMongooseValidationError, register);
+router.post('/confirm', confirm);
+
 
 app.use(router.routes());
 
