@@ -15,8 +15,8 @@ module.exports = new LocalStrategy(
         if (!isValidPassword) {
           return done(null, false, 'Невереный пароль');
         }
-
-        /* TODO */
+        const isValidToken = user.verificationToken;
+        if ( isValidToken !== '') return done(null, false, 'Подтвердите email');
 
         return done(null, user);
       } catch (err) {
