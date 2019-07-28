@@ -14,6 +14,7 @@ const Session = require('./models/Session');
 
 const app = new Koa();
 
+app.use(require('koa-static')('public'));
 app.use(require('koa-bodyparser')());
 
 app.use(async (ctx, next) => {
@@ -35,10 +36,10 @@ app.use((ctx, next) => {
   ctx.login = async function(user) {
     const token = uuid();
     await Session.create({token, user, lastVisit: new Date()});
-    
+
     return token;
   };
-  
+
   return next();
 });
 
@@ -47,17 +48,17 @@ const router = new Router({prefix: '/api'});
 router.use(async (ctx, next) => {
   const header = ctx.request.get('Authorization');
   if (!header) return next();
-  
+
   const token = header.split(' ')[1];
   if (!token) return next();
-  
+
   const session = await Session.findOne({token}).populate('user');
   if (!session) {
     ctx.throw(401, 'Неверный аутентификационный токен');
   }
   session.lastVisit = new Date();
   await session.save();
-  
+
   ctx.user = session.user;
   return next();
 });
@@ -76,7 +77,7 @@ router.get('/me', mustBeAuthenticated, me);
 router.post('/register', register);
 router.post('/confirm', confirm);
 
-router.get('/messages', messageList);
+router.get('/messages', mustBeAuthenticated, messageList);
 
 app.use(router.routes());
 
