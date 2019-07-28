@@ -19,6 +19,7 @@ app.use(require('koa-bodyparser')());
 
 app.use(async (ctx, next) => {
   try {
+    await next();
   } catch (err) {
     if (err.status) {
       ctx.status = err.status;
