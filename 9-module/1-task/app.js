@@ -11,7 +11,6 @@ const {me} = require('./controllers/me');
 const {register, confirm} = require('./controllers/registration');
 const {messageList} = require('./controllers/messages');
 const Session = require('./models/Session');
-const {usersList} = require('./controllers/users');
 
 const app = new Koa();
 
@@ -66,8 +65,6 @@ router.use(async (ctx, next) => {
 router.get('/categories', categoryList);
 router.get('/products', productsBySubcategory, productList);
 router.get('/products/:id', productById);
-router.get('/users', usersList);
-
 
 router.post('/login', login);
 
