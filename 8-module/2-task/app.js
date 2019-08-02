@@ -44,6 +44,7 @@ app.use((ctx, next) => {
 
 const router = new Router({prefix: '/api'});
 
+
 router.use(async (ctx, next) => {
   const header = ctx.request.get('Authorization');
   if (!header) return next();
@@ -75,9 +76,9 @@ router.get('/me', mustBeAuthenticated, me);
 
 router.post('/register', handleMongooseValidationError, register);
 router.post('/confirm', confirm);
+router.post('/orders', handleMongooseValidationError, mustBeAuthenticated, checkout);
+router.get('/orders', mustBeAuthenticated, getOrdersList);
 
-router.get('/orders', getOrdersList);
-router.post('/orders', checkout);
 
 app.use(router.routes());
 
